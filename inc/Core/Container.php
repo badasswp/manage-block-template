@@ -11,6 +11,7 @@
 namespace ManageBlockTemplate\Core;
 
 use ManageBlockTemplate\Interfaces\Kernel;
+use ManageBlockTemplate\Services\Template;
 use ManageBlockTemplate\Services\Admin;
 
 class Container implements Kernel {
@@ -31,6 +32,7 @@ class Container implements Kernel {
 	public function __construct() {
 		static::$services = [
 			Admin::class,
+			Template::class,
 		];
 	}
 
