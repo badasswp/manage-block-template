@@ -223,7 +223,7 @@ class Admin extends Service implements Kernel {
 	 *
 	 * @return void
 	 */
-	protected function __call( $method, $args ) {
+	public function __call( $method, $args ) {
 		$method    = explode( '_', $method );
 		$post_type = array_pop( $method );
 
