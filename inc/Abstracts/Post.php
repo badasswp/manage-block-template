@@ -275,7 +275,7 @@ abstract class Post {
 				$value = $meta_columns[ $column ]['default'] ?? '';
 			}
 
-			if ( $column = 'blocks' ) {
+			if ( 'blocks' === $column ) {
 				echo $value;
 				return;
 			}
