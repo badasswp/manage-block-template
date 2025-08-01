@@ -1,0 +1,10 @@
+{
+	"plugins": ["."],
+	"phpVersion": "8.2",
+	"port": 8496,
+	"testsPort": 8497,
+	"config": {
+		"WP_SITEURL": "http://manage-block-template.localhost",
+		"WP_HOME": "http://manage-block-template.localhost"
+	}
+}
