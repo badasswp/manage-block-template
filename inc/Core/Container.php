@@ -11,6 +11,7 @@
 namespace ManageBlockTemplate\Core;
 
 use ManageBlockTemplate\Interfaces\Kernel;
+use ManageBlockTemplate\Services\Post;
 use ManageBlockTemplate\Services\Template;
 use ManageBlockTemplate\Services\Admin;
 
@@ -33,6 +34,7 @@ class Container implements Kernel {
 		static::$services = [
 			Admin::class,
 			Template::class,
+			Post::class,
 		];
 	}
 
