@@ -45,7 +45,7 @@ class Post extends Service implements Kernel {
 		 * @param mixed[] $post_types Post types.
 		 * @return mixed[]
 		 */
-		$post_types = (array) apply_filters( 'manage_block_template_post_types', $post_types );
+		$post_types = (array) apply_filters( 'manage_block_template_cpts', $post_types );
 
 		foreach ( $post_types as $class ) {
 			if ( ! class_exists( $class ) ) {
