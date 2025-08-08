@@ -12,6 +12,7 @@ use ManageBlockTemplate\Posts\MBT;
  * @covers \ManageBlockTemplate\Posts\MBT::get_supports
  * @covers \ManageBlockTemplate\Posts\MBT::is_post_visible_in_rest
  * @covers \ManageBlockTemplate\Posts\MBT::is_post_visible_in_menu
+ * @covers \ManageBlockTemplate\Posts\MBT::get_post_meta_schema
  */
 class MBTTest extends TestCase {
 	public function setUp(): void {
