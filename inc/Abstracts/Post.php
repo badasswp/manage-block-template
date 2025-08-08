@@ -25,6 +25,19 @@ abstract class Post {
 	public static $name;
 
 	/**
+	 * Post query.
+	 *
+	 * @var array
+	 */
+	public static $query = [
+		'post_type'      => static::$name,
+		'post_status'    => 'publish',
+		'posts_per_page' => 10,
+		'orderby'        => 'date',
+		'no_found_rows'  => false,
+	];
+
+	/**
 	 * Set up.
 	 *
 	 * @since 1.0.0
@@ -357,6 +370,26 @@ abstract class Post {
 	}
 
 	/**
+	 * Get Query.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return \WP_Query
+	 */
+	public static function get_query() {
+		$query_cache = sprintf( '%s_query', static::$name );
+
+		$query = wp_cache_get( $query_cache );
+
+		if ( false === $query ) {
+			$query = new WP_Query( static::$query );
+			wp_cache_set( $query_cache, $query, '', DAY_IN_SECONDS );
+		}
+
+		return $query;
+	}
+
+	/**
 	 * Get Posts.
 	 *
 	 * @since 1.0.0
@@ -364,20 +397,96 @@ abstract class Post {
 	 * @return \WP_Post[]
 	 */
 	public static function get_posts(): array {
-		$posts = get_posts(
-			[
-				'post_type'      => static::$name,
-				'post_status'    => 'publish',
-				'posts_per_page' => -1,
-				'orderby'        => 'date',
-			]
-		);
+		$query = static::get_query();
 
-		if ( ! $posts ) {
+		if ( ! ( $query instanceof \WP_Query ) ) {
 			return [];
 		}
 
-		return $posts;
+		return $query->posts;
+	}
+
+	/**
+	 * Get total number of Posts.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return int
+	 */
+	public static function get_total_posts_count(): int {
+		$query = static::get_query();
+
+		if ( ! ( $query instanceof \WP_Query ) ) {
+			return 0;
+		}
+
+		return $query->found_posts;
+	}
+
+	/**
+	 * Get Posts by Single meta query.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $key   Meta key.
+	 * @param string $value Meta value.
+	 *
+	 * @return \WP_Query|null
+	 */
+	public static function get_posts_by_single_meta_query( $key, $value, $cache_name = '' ): array {
+		if ( empty( $id ) || empty( $value ) ) {
+			return null;
+		}
+
+		$query_cache = sprintf(
+			'%s_query_by_single_meta_%s_%s',
+			static::$name,
+			(string) $key,
+			(string) $value
+		);
+
+		// Default to cache name, if it exists.
+		$query_cache = $cache_name ?: $query_cache;
+
+		$query = wp_cache_get( $query_cache );
+
+		if ( false === $query ) {
+			$query = new WP_Query(
+				wp_parse_args(
+					[
+						'meta_key'   => (string) $key,
+						'meta_value' => (string) $value,
+					],
+					static::$query
+			 	)
+			);
+			wp_cache_set( $query_cache, $query, '', DAY_IN_SECONDS );
+		}
+
+		return $query;
+	}
+
+	// Teacher::get_posts( 'age', 33 );
+	// Teacher::get_posts_count( 'age', 33 );
+
+	// Teacher::get_posts();
+	// Teacher::get_posts_count();
+
+	/**
+	 * Get Posts by Single meta.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return \WP_Post[]
+	 */
+	public static function get_posts_by_single_meta( $key, $value, $cache_name ): array {
+		$query = static::get_posts_by_single_meta_query( $key, $value, $cache_name );
+
+		if ( ! ( $query instanceof \WP_Query ) ) {
+			return [];
+		}
+
+		return $query->posts;
 	}
 
 	/**
@@ -390,35 +499,29 @@ abstract class Post {
 	 *
 	 * @return \WP_Post[]
 	 */
-	public static function get_posts_by_meta( $key, $value ): array {
+	public static function get_posts_by_meta_query( $key, $value ): array {
 		if ( empty( $id ) || empty( $value ) ) {
 			return [];
 		}
 
-		$posts = get_posts(
-			[
-				'post_type'      => static::$name,
-				'post_status'    => 'publish',
-				'posts_per_page' => -1,
-				'meta_key'       => (string) $key,
-				'meta_value'     => (string) $value,
-				'orderby'        => 'date',
-				'order'          => 'ASC',
-			]
-		);
+		$query_cache = sprintf( '%s_query_by_meta_%s_%s', static::$name, $key, $value );
 
-		return $posts;
-	}
+		$query = wp_cache_get( $query_cache );
 
-	/**
-	 * Get number of Posts.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return int
-	 */
-	public static function get_number_of_posts(): int {
-		return count( static::get_posts() );
+		if ( false === $query ) {
+			$query = new WP_Query(
+				wp_parse_args(
+					[
+						'meta_key'   => (string) $key,
+						'meta_value' => (string) $value,
+					],
+					static::$query
+			 	)
+			);
+			wp_cache_set( $query_cache, $query, '', DAY_IN_SECONDS );
+		}
+
+		return $query->posts;
 	}
 
 	/**
