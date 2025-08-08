@@ -63,4 +63,59 @@ class MBTTest extends TestCase {
 
 		$this->assertSame( 'manage-block-template', $mbt->is_post_visible_in_menu() );
 	}
+
+	public function test_get_post_meta_schema() {
+		\WP_Mock::userFunction( 'esc_html' )
+			->andReturnUsing(
+				function ( $arg ) {
+					return $arg;
+				}
+			);
+
+		\WP_Mock::userFunction( 'esc_html__' )
+			->andReturnUsing(
+				function ( $arg1, $arg2 ) {
+					return $arg1;
+				}
+			);
+
+		\WP_Mock::userFunction( 'get_the_ID' )
+			->andReturn( 1 );
+
+		\WP_Mock::userFunction( 'get_post_field' )
+			->with( 'post_content', 1 )
+			->andReturn( 'Hello World' );
+
+		\WP_Mock::userFunction( 'parse_blocks' )
+			->with( 'Hello World' )
+			->andReturn(
+				[
+					[ 'blockName' => 'core/paragraph' ],
+					[ 'blockName' => 'core/image' ],
+					[ 'blockName' => null ],
+					[ 'blockName' => 'core/blockquote' ],
+				]
+			);
+
+		$mbt = Mockery::mock( MBT::class )->makePartial();
+		$mbt->shouldAllowMockingProtectedMethods();
+
+		$this->assertSame(
+			[
+				'blocks'                 => [
+					'label'   => 'Blocks',
+					'value'   => '<span style="margin: 0; display: block;">core/paragraph</span><span style="margin: 0; display: block;">core/image</span><span style="margin: 0; display: block;">core/blockquote</span>',
+					'type'    => 'string',
+					'default' => '',
+				],
+				'total_number_of_blocks' => [
+					'label'   => 'Total Number of Blocks',
+					'value'   => 3,
+					'type'    => 'integer',
+					'default' => 0,
+				],
+			],
+			$mbt->get_post_meta_schema()
+		);
+	}
 }
