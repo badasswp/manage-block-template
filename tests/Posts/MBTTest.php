@@ -10,6 +10,8 @@ use ManageBlockTemplate\Posts\MBT;
  * @covers \ManageBlockTemplate\Posts\MBT::get_singular_label
  * @covers \ManageBlockTemplate\Posts\MBT::get_plural_label
  * @covers \ManageBlockTemplate\Posts\MBT::get_supports
+ * @covers \ManageBlockTemplate\Posts\MBT::is_post_visible_in_rest
+ * @covers \ManageBlockTemplate\Posts\MBT::is_post_visible_in_menu
  */
 class MBTTest extends TestCase {
 	public function setUp(): void {
