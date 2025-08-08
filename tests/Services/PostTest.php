@@ -79,4 +79,64 @@ class PostTest extends TestCase {
 
 		$this->assertConditionsMet();
 	}
+
+	public function test_register_post_types() {
+		$labels = [
+			'name'          => 'Templates',
+			'singular_name' => 'Template',
+			'add_new'       => 'Add New Template',
+			'add_new_item'  => 'Add New Template',
+			'new_item'      => 'New Template',
+			'edit_item'     => 'Edit Template',
+			'view_item'     => 'View Template',
+			'search_items'  => 'Search Templates',
+			'menu_name'     => 'Templates',
+		];
+
+		\WP_Mock::userFunction( 'post_type_exists' )
+			->with( 'mbt' )
+			->andReturn( false );
+
+		\WP_Mock::userFunction( 'esc_html__' )
+			->andReturnUsing(
+				function( $arg ) {
+					return $arg;
+				}
+			);
+
+		\WP_Mock::userFunction( 'register_post_type' )
+			->with(
+				'mbt',
+				[
+					'name'         => 'mbt',
+					'labels'       => $labels,
+					'supports'     => [ 'title', 'thumbnail', 'editor' ],
+					'show_in_rest' => true,
+					'show_in_menu' => 'manage-block-template',
+					'public'       => true,
+					'rewrite'      => [
+						'slug' => 'mbt',
+					],
+				]
+			);
+
+		\WP_Mock::expectFilter(
+			'manage_block_template_post_options',
+			[
+				'name'         => 'mbt',
+				'labels'       => $labels,
+				'supports'     => [ 'title', 'thumbnail', 'editor' ],
+				'show_in_rest' => true,
+				'show_in_menu' => 'manage-block-template',
+				'public'       => true,
+				'rewrite'      => [
+					'slug' => 'mbt',
+				],
+			]
+		);
+
+		$this->post->register_post_types();
+
+		$this->assertConditionsMet();
+	}
 }
