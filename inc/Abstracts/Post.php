@@ -29,14 +29,7 @@ abstract class Post {
 	 *
 	 * @var array
 	 */
-	public static $query = [
-		'post_type'      => static::$name,
-		'post_status'    => 'publish',
-		'posts_per_page' => 10,
-		'paged'          => get_query_var( 'paged' ) ?: 1
-		'orderby'        => 'date',
-		'no_found_rows'  => false,
-	];
+	public static $query = [];
 
 	/**
 	 * Set up.
@@ -377,7 +370,16 @@ abstract class Post {
 	 *
 	 * @return \WP_Query
 	 */
-	public static function get_query( $key = '', $value = '', $force = false, $cache_name = '' ) {
+	public static function get_query( $key = '', $value = '', $limit = true, $cache_name = '' ) {
+		static::$query = [
+			'post_type'      => static::$name,
+			'post_status'    => 'publish',
+			'posts_per_page' => $limit ? 10 : -1,
+			'paged'          => get_query_var( 'paged' ) ?: 1,
+			'orderby'        => 'date',
+			'no_found_rows'  => false,
+		];
+
 		$post_type   = static::$name;
 		$query_cache = sprintf( '%s_query', $post_type );
 
@@ -403,10 +405,6 @@ abstract class Post {
 
 		$query = wp_cache_get( $query_cache );
 
-		// Force all posts to be returned for display.
-		$force_posts = $force ? [ 'posts_per_page' => -1 ] : [];
-		$query_args  = wp_parse_args( $force_posts, static::$query );
-
 		/**
 		 * Filter Query Args.
 		 *
@@ -416,12 +414,10 @@ abstract class Post {
 		 * @param mixed $query_args Query Args.
 		 * @return mixed $query_args
 		 */
-		$query_args = apply_filters( "manage_block_template_query_args_{$post_type}", $query_args );
+		$query_args = apply_filters( "manage_block_template_query_args_{$post_type}", static::$query );
 
 		if ( false === $query ) {
-			$query = new WP_Query(
-				wp_parse_args( $force_posts, static::$query )
-			);
+			$query = new WP_Query( $query_args );
 			wp_cache_set( $query_cache, $query, '', DAY_IN_SECONDS );
 		}
 
@@ -435,7 +431,7 @@ abstract class Post {
 	 *
 	 * @return \WP_Post[]
 	 */
-	public static function get_posts( $key = '', $value = '', $force = false, $cache = '' ): array {
+	public static function get_posts( $key = '', $value = '', $limit = true, $cache = '' ): array {
 		$query = static::get_query( $key, $value, $force, $cache );
 
 		if ( ! ( $query instanceof \WP_Query ) ) {
@@ -452,7 +448,7 @@ abstract class Post {
 	 *
 	 * @return int
 	 */
-	public static function get_posts_count( $key = '', $value = '', $force = false, $cache = '' ): int {
+	public static function get_posts_count( $key = '', $value = '', $limit = true, $cache = '' ): int {
 		$query = static::get_query( $key, $value, $force, $cache );
 
 		if ( ! ( $query instanceof \WP_Query ) ) {
