@@ -33,6 +33,7 @@ abstract class Post {
 		'post_type'      => static::$name,
 		'post_status'    => 'publish',
 		'posts_per_page' => 10,
+		'paged'          => get_query_var( 'paged' ) ?: 1
 		'orderby'        => 'date',
 		'no_found_rows'  => false,
 	];
@@ -376,13 +377,51 @@ abstract class Post {
 	 *
 	 * @return \WP_Query
 	 */
-	public static function get_query() {
-		$query_cache = sprintf( '%s_query', static::$name );
+	public static function get_query( $key = '', $value = '', $force = false, $cache_name = '' ) {
+		$post_type   = static::$name;
+		$query_cache = sprintf( '%s_query', $post_type );
+
+		if ( isset( $key ) && isset( $value ) ) {
+			$query_cache = sprintf(
+				'%s_query_by_single_meta_%s_%s',
+				$post_type,
+				(string) $key,
+				(string) $value
+			);
+
+			// Default to cache name, if it exists.
+			$query_cache = $cache_name ?: $query_cache;
+
+			static::$query = wp_parse_args(
+				[
+					'meta_key'   => (string) $key,
+					'meta_value' => (string) $value,
+				],
+				static::$query
+			);
+		}
 
 		$query = wp_cache_get( $query_cache );
 
+		// Force all posts to be returned for display.
+		$force_posts = $force ? [ 'posts_per_page' => -1 ] : [];
+		$query_args  = wp_parse_args( $force_posts, static::$query );
+
+		/**
+		 * Filter Query Args.
+		 *
+		 * This filter provides a way for users to filter
+		 * the query args before it is sent.
+		 *
+		 * @param mixed $query_args Query Args.
+		 * @return mixed $query_args
+		 */
+		$query_args = apply_filters( "manage_block_template_query_args_{$post_type}", $query_args );
+
 		if ( false === $query ) {
-			$query = new WP_Query( static::$query );
+			$query = new WP_Query(
+				wp_parse_args( $force_posts, static::$query )
+			);
 			wp_cache_set( $query_cache, $query, '', DAY_IN_SECONDS );
 		}
 
@@ -396,8 +435,8 @@ abstract class Post {
 	 *
 	 * @return \WP_Post[]
 	 */
-	public static function get_posts(): array {
-		$query = static::get_query();
+	public static function get_posts( $key = '', $value = '', $force = false, $cache = '' ): array {
+		$query = static::get_query( $key, $value, $force, $cache );
 
 		if ( ! ( $query instanceof \WP_Query ) ) {
 			return [];
@@ -413,8 +452,8 @@ abstract class Post {
 	 *
 	 * @return int
 	 */
-	public static function get_total_posts_count(): int {
-		$query = static::get_query();
+	public static function get_posts_count( $key = '', $value = '', $force = false, $cache = '' ): int {
+		$query = static::get_query( $key, $value, $force, $cache );
 
 		if ( ! ( $query instanceof \WP_Query ) ) {
 			return 0;
@@ -424,114 +463,13 @@ abstract class Post {
 	}
 
 	/**
-	 * Get Posts by Single meta query.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $key   Meta key.
-	 * @param string $value Meta value.
-	 *
-	 * @return \WP_Query|null
-	 */
-	public static function get_posts_by_single_meta_query( $key, $value, $cache_name = '' ): array {
-		if ( empty( $id ) || empty( $value ) ) {
-			return null;
-		}
-
-		$query_cache = sprintf(
-			'%s_query_by_single_meta_%s_%s',
-			static::$name,
-			(string) $key,
-			(string) $value
-		);
-
-		// Default to cache name, if it exists.
-		$query_cache = $cache_name ?: $query_cache;
-
-		$query = wp_cache_get( $query_cache );
-
-		if ( false === $query ) {
-			$query = new WP_Query(
-				wp_parse_args(
-					[
-						'meta_key'   => (string) $key,
-						'meta_value' => (string) $value,
-					],
-					static::$query
-			 	)
-			);
-			wp_cache_set( $query_cache, $query, '', DAY_IN_SECONDS );
-		}
-
-		return $query;
-	}
-
-	// Teacher::get_posts( 'age', 33 );
-	// Teacher::get_posts_count( 'age', 33 );
-
-	// Teacher::get_posts();
-	// Teacher::get_posts_count();
-
-	/**
-	 * Get Posts by Single meta.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return \WP_Post[]
-	 */
-	public static function get_posts_by_single_meta( $key, $value, $cache_name ): array {
-		$query = static::get_posts_by_single_meta_query( $key, $value, $cache_name );
-
-		if ( ! ( $query instanceof \WP_Query ) ) {
-			return [];
-		}
-
-		return $query->posts;
-	}
-
-	/**
-	 * Get Posts by Meta.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $key   Meta key.
-	 * @param string $value Meta value.
-	 *
-	 * @return \WP_Post[]
-	 */
-	public static function get_posts_by_meta_query( $key, $value ): array {
-		if ( empty( $id ) || empty( $value ) ) {
-			return [];
-		}
-
-		$query_cache = sprintf( '%s_query_by_meta_%s_%s', static::$name, $key, $value );
-
-		$query = wp_cache_get( $query_cache );
-
-		if ( false === $query ) {
-			$query = new WP_Query(
-				wp_parse_args(
-					[
-						'meta_key'   => (string) $key,
-						'meta_value' => (string) $value,
-					],
-					static::$query
-			 	)
-			);
-			wp_cache_set( $query_cache, $query, '', DAY_IN_SECONDS );
-		}
-
-		return $query->posts;
-	}
-
-	/**
 	 * Get most recent Post.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @return \WP_Post
 	 */
-	public static function get_most_recent_post() {
+	public static function get_latest_post() {
 		return ( static::get_posts() )[0];
 	}
 }
