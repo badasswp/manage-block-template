@@ -9,6 +9,7 @@ use ManageBlockTemplate\Services\Post;
 
 /**
  * @covers \ManageBlockTemplate\Services\Post::register
+ * @covers \ManageBlockTemplate\Services\Post::register_post_type
  */
 class PostTest extends TestCase {
 	private $post;
