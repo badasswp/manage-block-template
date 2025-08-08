@@ -47,4 +47,18 @@ class MBTTest extends TestCase {
 			$mbt->get_supports()
 		);
 	}
+
+	public function test_is_post_visible_in_rest() {
+		$mbt = Mockery::mock( MBT::class )->makePartial();
+		$mbt->shouldAllowMockingProtectedMethods();
+
+		$this->assertSame( true, $mbt->is_post_visible_in_rest() );
+	}
+
+	public function test_is_post_visible_in_menu() {
+		$mbt = Mockery::mock( MBT::class )->makePartial();
+		$mbt->shouldAllowMockingProtectedMethods();
+
+		$this->assertSame( 'manage-block-template', $mbt->is_post_visible_in_menu() );
+	}
 }
