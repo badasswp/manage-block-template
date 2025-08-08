@@ -100,7 +100,7 @@ class PostTest extends TestCase {
 
 		\WP_Mock::userFunction( 'esc_html__' )
 			->andReturnUsing(
-				function( $arg ) {
+				function ( $arg ) {
 					return $arg;
 				}
 			);
