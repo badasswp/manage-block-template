@@ -44,7 +44,7 @@ class MBTTest extends TestCase {
 			[
 				'title',
 				'thumbnail',
-				'editor'
+				'editor',
 			],
 			$mbt->get_supports()
 		);
