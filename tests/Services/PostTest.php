@@ -8,8 +8,20 @@ use ManageBlockTemplate\Posts\MBT;
 use ManageBlockTemplate\Services\Post;
 
 /**
+ * @covers \ManageBlockTemplate\Services\Post::__construct
  * @covers \ManageBlockTemplate\Services\Post::register
  * @covers \ManageBlockTemplate\Services\Post::register_post_types
+ * @covers \ManageBlockTemplate\Abstracts\Post::__construct
+ * @covers \ManageBlockTemplate\Abstracts\Post::get_labels
+ * @covers \ManageBlockTemplate\Abstracts\Post::get_name
+ * @covers \ManageBlockTemplate\Abstracts\Post::get_options
+ * @covers \ManageBlockTemplate\Abstracts\Post::register_post_type
+ * @covers \ManageBlockTemplate\Posts\MBT::get_plural_label
+ * @covers \ManageBlockTemplate\Posts\MBT::get_singular_label
+ * @covers \ManageBlockTemplate\Posts\MBT::get_slug
+ * @covers \ManageBlockTemplate\Posts\MBT::get_supports
+ * @covers \ManageBlockTemplate\Posts\MBT::is_post_visible_in_menu
+ * @covers \ManageBlockTemplate\Posts\MBT::is_post_visible_in_rest
  */
 class PostTest extends TestCase {
 	private $post;
