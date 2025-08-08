@@ -7,6 +7,10 @@ use WP_Mock\Tools\TestCase;
 use ManageBlockTemplate\Posts\MBT;
 use ManageBlockTemplate\Services\Post;
 
+/**
+ * @covers \ManageBlockTemplate\Services\Post::register
+ * @covers \ManageBlockTemplate\Services\Post::register_post_types
+ */
 class PostTest extends TestCase {
 	private $post;
 
