@@ -7,9 +7,6 @@ use WP_Mock\Tools\TestCase;
 use ManageBlockTemplate\Posts\MBT;
 use ManageBlockTemplate\Services\Post;
 
-/**
- * @covers Post
- */
 class PostTest extends TestCase {
 	private $post;
 
