@@ -363,28 +363,6 @@ abstract class Post {
 		);
 	}
 
-	/*if ( isset( $key ) && isset( $value ) ) {
-			$query_cache = sprintf(
-				'%s_query_by_single_meta_%s_%s',
-				$post_type,
-				(string) $key,
-				(string) $value
-			);
-
-			// Default to cache name, if it exists.
-			$query_cache = $cache_name ?: $query_cache;
-
-			static::$query = wp_parse_args(
-				[
-					'meta_key'   => (string) $key,
-					'meta_value' => (string) $value,
-				],
-				static::$query
-			);
-		}
-
-		$query = wp_cache_get( $query_cache );*/
-
 	/**
 	 * Get Query.
 	 *
@@ -393,7 +371,7 @@ abstract class Post {
 	 * @param mixed $query_args Query Args.
 	 * @return \WP_Query
 	 */
-	public static function get_query( $query = [] ) {
+	protected static function get_query( $query = [] ) {
 		$query_args = wp_parse_args(
 			$query,
 			[
@@ -406,6 +384,17 @@ abstract class Post {
 			]
 		);
 
+		$cache_name = sprintf( '%s_posts_query', static::$name );
+
+		if ( isset( $query_args['meta_key'] ) && isset( $query_args['meta_value'] ) ) {
+			$cache_name = sprintf(
+				'%s_posts_query_by_key_value_%s_%s',
+				$post_type,
+				(string) $query_args['meta_key'],
+				(string) $query_args['meta_value']
+			);
+		}
+
 		/**
 		 * Filter Cache name.
 		 *
@@ -417,7 +406,7 @@ abstract class Post {
 		 *
 		 * @return string $cache_name
 		 */
-		$cache_name = apply_filters( 'manage_block_template_query_cache_name', sprintf( '%s_posts_query', static::$name ), $query_args );
+		$cache_name = apply_filters( 'manage_block_template_query_cache_name', $cache_name, $query_args );
 
 		/**
 		 * Filter Query Args.
@@ -430,9 +419,11 @@ abstract class Post {
 		 */
 		$query_args = apply_filters( 'manage_block_template_query_args', $query_args );
 
+		$query = wp_cache_get( $cache_name );
+
 		if ( false === $query ) {
-			$query = new WP_Query( $query_args );
-			wp_cache_set( $query_cache, $query, '', DAY_IN_SECONDS );
+			$query = new \WP_Query( $query_args );
+			wp_cache_set( $cache_name, $query, '', DAY_IN_SECONDS );
 		}
 
 		return $query;
@@ -465,6 +456,10 @@ abstract class Post {
 	 * @return \WP_Post[]
 	 */
 	public static function get_posts_by_key_value( $key, $value ) {
+		if ( ! isset( $key ) || ! isset( $value ) ) {
+			return [];
+		}
+
 		$query = static::query(
 			[
 				'meta_key'   => (string) $key,
@@ -478,8 +473,6 @@ abstract class Post {
 
 		return $query->posts;
 	}
-
-
 
 	/**
 	 * Get total number of Posts.
