@@ -369,7 +369,7 @@ abstract class Post {
 	 * @since 1.0.0
 	 *
 	 * @param mixed $args Query Args.
-	 * @return \WP_Query
+	 * @return \WP_Query|\WP_Error
 	 */
 	protected static function get_query( $args = [] ) {
 		$query_args = wp_parse_args(
@@ -430,6 +430,16 @@ abstract class Post {
 			wp_cache_set( $cache_name, $query, '', DAY_IN_SECONDS );
 		}
 
+		if ( ! ( $query instanceof \WP_Query ) ) {
+			return new \WP_Error(
+				'get-query',
+				sprintf(
+					'Query Error: Non WP_Query instance returned: %s',
+					(string) $query
+				),
+			);
+		}
+
 		return $query;
 	}
 
@@ -444,13 +454,10 @@ abstract class Post {
 	public static function get_posts( $args = [] ) {
 		$query = static::get_query( $args );
 
-		if ( ! ( $query instanceof \WP_Query ) ) {
+		if ( is_wp_error( $query ) ) {
 			return new \WP_Error(
 				'get-posts',
-				sprintf(
-					'Query Error: Non WP_Query instance returned: %s',
-					(string) $query
-				),
+				$query->get_error_message(),
 			);
 		}
 
@@ -486,13 +493,10 @@ abstract class Post {
 			],
 		);
 
-		if ( ! ( $query instanceof \WP_Query ) ) {
+		if ( is_wp_error( $query ) ) {
 			return new \WP_Error(
 				'get-posts-by-key-value',
-				sprintf(
-					'Query Error: Non WP_Query instance returned: %s',
-					(string) $query
-				),
+				$query->get_error_message(),
 			);
 		}
 
@@ -525,13 +529,10 @@ abstract class Post {
 	public static function get_posts_count( $args = [] ) {
 		$query = static::get_query( $args );
 
-		if ( ! ( $query instanceof \WP_Query ) ) {
+		if ( is_wp_error( $query ) ) {
 			return new \WP_Error(
 				'get-posts-count',
-				sprintf(
-					'Query Error: Non WP_Query instance returned: %s',
-					(string) $query
-				),
+				$query->get_error_message(),
 			);
 		}
 
@@ -567,13 +568,10 @@ abstract class Post {
 			],
 		);
 
-		if ( ! ( $query instanceof \WP_Query ) ) {
+		if ( is_wp_error( $query ) ) {
 			return new \WP_Error(
 				'get-posts-by-key-value-count',
-				sprintf(
-					'Query Error: Non WP_Query instance returned: %s',
-					(string) $query
-				),
+				$query->get_error_message(),
 			);
 		}
 
