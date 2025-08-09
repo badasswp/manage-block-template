@@ -408,7 +408,7 @@ abstract class Post {
 		 *
 		 * @return string $cache_name
 		 */
-		$cache_name = apply_filters( 'manage_block_template_query_cache_name', $cache_name, $query_args );
+		$cache_name = apply_filters( 'manage_block_template_post_query_cache_name', $cache_name, $query_args );
 
 		/**
 		 * Filter Query Args.
@@ -421,7 +421,7 @@ abstract class Post {
 		 * @param mixed $query_args Query Args.
 		 * @return mixed $query_args
 		 */
-		$query_args = apply_filters( 'manage_block_template_query_args', $query_args );
+		$query_args = apply_filters( 'manage_block_template_post_query_args', $query_args );
 
 		$query = wp_cache_get( $cache_name );
 
