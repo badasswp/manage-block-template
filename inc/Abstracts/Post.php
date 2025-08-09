@@ -389,7 +389,7 @@ abstract class Post {
 		if ( isset( $query_args['meta_key'] ) && isset( $query_args['meta_value'] ) ) {
 			$cache_name = sprintf(
 				'%s_posts_query_by_key_value_%s_%s',
-				$post_type,
+				static::$name,
 				(string) $query_args['meta_key'],
 				(string) $query_args['meta_value']
 			);
@@ -439,13 +439,19 @@ abstract class Post {
 	 * @since 1.0.0
 	 *
 	 * @param mixed $args Query Args.
-	 * @return \WP_Post[]
+	 * @return \WP_Post[]|\WP_Error
 	 */
-	public static function get_posts( $args = [] ): array {
+	public static function get_posts( $args = [] ) {
 		$query = static::get_query( $args );
 
 		if ( ! ( $query instanceof \WP_Query ) ) {
-			return [];
+			return new \WP_Error(
+				'get-posts',
+				sprintf(
+					'Query Error: Non WP_Query instance returned: %s',
+					(string) $query
+				),
+			);
 		}
 
 		return $query->posts;
@@ -459,14 +465,21 @@ abstract class Post {
 	 * @param string $key   Meta key.
 	 * @param string $value Meta value.
 	 *
-	 * @return \WP_Post[]
+	 * @return \WP_Post[]|\WP_Error
 	 */
 	public static function get_posts_by_key_value( $key, $value ) {
 		if ( ! isset( $key ) || ! isset( $value ) ) {
-			return [];
+			return new \WP_Error(
+				'get-posts-by-key-value',
+				sprintf(
+					'Unset function arguments - key: %s, value: %s',
+					(string) $key,
+					(string) $value
+				),
+			);
 		}
 
-		$query = static::query(
+		$query = static::get_query(
 			[
 				'meta_key'   => (string) $key,
 				'meta_value' => (string) $value,
@@ -474,10 +487,31 @@ abstract class Post {
 		);
 
 		if ( ! ( $query instanceof \WP_Query ) ) {
-			return [];
+			return new \WP_Error(
+				'get-posts-by-key-value',
+				sprintf(
+					'Query Error: Non WP_Query instance returned: %s',
+					(string) $query
+				),
+			);
 		}
 
 		return $query->posts;
+	}
+
+	/**
+	 * Get most recent Post.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return \WP_Post|null
+	 */
+	public static function get_latest_post() {
+		if ( empty( static::get_posts() ) ) {
+			return null;
+		}
+
+		return ( static::get_posts() )[0];
 	}
 
 	/**
@@ -486,26 +520,63 @@ abstract class Post {
 	 * @since 1.0.0
 	 *
 	 * @param mixed $args Query Args.
-	 * @return int
+	 * @return int|\WP_Error
 	 */
-	public static function get_posts_count( $args = [] ): int {
+	public static function get_posts_count( $args = [] ) {
 		$query = static::get_query( $args );
 
 		if ( ! ( $query instanceof \WP_Query ) ) {
-			return 0;
+			return new \WP_Error(
+				'get-posts-count',
+				sprintf(
+					'Query Error: Non WP_Query instance returned: %s',
+					(string) $query
+				),
+			);
 		}
 
-		return $query->found_posts;
+		return absint( $query->found_posts );
 	}
 
 	/**
-	 * Get most recent Post.
+	 * Get total number of Posts by key-value.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return \WP_Post
+	 * @param string $key   Meta key.
+	 * @param string $value Meta value.
+	 *
+	 * @return int|\WP_Error
 	 */
-	public static function get_latest_post() {
-		return ( static::get_posts() )[0];
+	public static function get_posts_by_key_value_count( $key, $value ) {
+		if ( ! isset( $key ) || ! isset( $value ) ) {
+			return new \WP_Error(
+				'get-posts-by-key-value-count',
+				sprintf(
+					'Unset function arguments - key: %s, value: %s',
+					(string) $key,
+					(string) $value
+				),
+			);
+		}
+
+		$query = static::get_query(
+			[
+				'meta_key'   => (string) $key,
+				'meta_value' => (string) $value,
+			],
+		);
+
+		if ( ! ( $query instanceof \WP_Query ) ) {
+			return new \WP_Error(
+				'get-posts-by-key-value-count',
+				sprintf(
+					'Query Error: Non WP_Query instance returned: %s',
+					(string) $query
+				),
+			);
+		}
+
+		return absint( $query->found_posts );
 	}
 }
