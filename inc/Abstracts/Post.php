@@ -401,6 +401,8 @@ abstract class Post {
 		 * This filter provides a way for users to filter
 		 * the cache name.
 		 *
+		 * @since 1.0.0
+		 *
 		 * @param string $cache_name Cache name.
 		 * @param mixed  $query_args Query Args.
 		 *
@@ -413,6 +415,8 @@ abstract class Post {
 		 *
 		 * This filter provides a way for users to filter
 		 * the query args before it is sent.
+		 *
+		 * @since 1.0.0
 		 *
 		 * @param mixed $query_args Query Args.
 		 * @return mixed $query_args
