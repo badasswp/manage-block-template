@@ -368,12 +368,12 @@ abstract class Post {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param mixed $query_args Query Args.
+	 * @param mixed $args Query Args.
 	 * @return \WP_Query
 	 */
-	protected static function get_query( $query = [] ) {
+	protected static function get_query( $args = [] ) {
 		$query_args = wp_parse_args(
-			$query,
+			$args,
 			[
 				'post_type'      => static::$name,
 				'post_status'    => 'publish',
@@ -438,11 +438,11 @@ abstract class Post {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param mixed $query_args Query Args.
+	 * @param mixed $args Query Args.
 	 * @return \WP_Post[]
 	 */
-	public static function get_posts( $query = [] ): array {
-		$query = static::get_query( $query );
+	public static function get_posts( $args = [] ): array {
+		$query = static::get_query( $args );
 
 		if ( ! ( $query instanceof \WP_Query ) ) {
 			return [];
@@ -456,7 +456,9 @@ abstract class Post {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param mixed $query_args Query Args.
+	 * @param string $key   Meta key.
+	 * @param string $value Meta value.
+	 *
 	 * @return \WP_Post[]
 	 */
 	public static function get_posts_by_key_value( $key, $value ) {
@@ -483,11 +485,11 @@ abstract class Post {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param mixed $query_args Query Args.
+	 * @param mixed $args Query Args.
 	 * @return int
 	 */
-	public static function get_posts_count( $query = [] ): int {
-		$query = static::get_query( $query );
+	public static function get_posts_count( $args = [] ): int {
+		$query = static::get_query( $args );
 
 		if ( ! ( $query instanceof \WP_Query ) ) {
 			return 0;
