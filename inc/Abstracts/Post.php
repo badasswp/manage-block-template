@@ -363,27 +363,7 @@ abstract class Post {
 		);
 	}
 
-	/**
-	 * Get Query.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return \WP_Query
-	 */
-	public static function get_query( $key = '', $value = '', $limit = true, $cache_name = '' ) {
-		static::$query = [
-			'post_type'      => static::$name,
-			'post_status'    => 'publish',
-			'posts_per_page' => $limit ? 10 : -1,
-			'paged'          => get_query_var( 'paged' ) ?: 1,
-			'orderby'        => 'date',
-			'no_found_rows'  => false,
-		];
-
-		$post_type   = static::$name;
-		$query_cache = sprintf( '%s_query', $post_type );
-
-		if ( isset( $key ) && isset( $value ) ) {
+	/*if ( isset( $key ) && isset( $value ) ) {
 			$query_cache = sprintf(
 				'%s_query_by_single_meta_%s_%s',
 				$post_type,
@@ -403,7 +383,41 @@ abstract class Post {
 			);
 		}
 
-		$query = wp_cache_get( $query_cache );
+		$query = wp_cache_get( $query_cache );*/
+
+	/**
+	 * Get Query.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param mixed $query_args Query Args.
+	 * @return \WP_Query
+	 */
+	public static function get_query( $query = [] ) {
+		$query_args = wp_parse_args(
+			$query,
+			[
+				'post_type'      => static::$name,
+				'post_status'    => 'publish',
+				'posts_per_page' => 10,
+				'paged'          => get_query_var( 'paged' ) ?: 1,
+				'orderby'        => 'date',
+				'no_found_rows'  => false,
+			]
+		);
+
+		/**
+		 * Filter Cache name.
+		 *
+		 * This filter provides a way for users to filter
+		 * the cache name.
+		 *
+		 * @param string $cache_name Cache name.
+		 * @param mixed  $query_args Query Args.
+		 *
+		 * @return string $cache_name
+		 */
+		$cache_name = apply_filters( 'manage_block_template_query_cache_name', sprintf( '%s_posts_query', static::$name ), $query_args );
 
 		/**
 		 * Filter Query Args.
@@ -414,7 +428,7 @@ abstract class Post {
 		 * @param mixed $query_args Query Args.
 		 * @return mixed $query_args
 		 */
-		$query_args = apply_filters( "manage_block_template_query_args_{$post_type}", static::$query );
+		$query_args = apply_filters( 'manage_block_template_query_args', $query_args );
 
 		if ( false === $query ) {
 			$query = new WP_Query( $query_args );
@@ -429,10 +443,11 @@ abstract class Post {
 	 *
 	 * @since 1.0.0
 	 *
+	 * @param mixed $query_args Query Args.
 	 * @return \WP_Post[]
 	 */
-	public static function get_posts( $key = '', $value = '', $limit = true, $cache = '' ): array {
-		$query = static::get_query( $key, $value, $force, $cache );
+	public static function get_posts( $query = [] ): array {
+		$query = static::get_query( $query );
 
 		if ( ! ( $query instanceof \WP_Query ) ) {
 			return [];
@@ -442,14 +457,40 @@ abstract class Post {
 	}
 
 	/**
+	 * Get Posts by key-value.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param mixed $query_args Query Args.
+	 * @return \WP_Post[]
+	 */
+	public static function get_posts_by_key_value( $key, $value ) {
+		$query = static::query(
+			[
+				'meta_key'   => (string) $key,
+				'meta_value' => (string) $value,
+			],
+		);
+
+		if ( ! ( $query instanceof \WP_Query ) ) {
+			return [];
+		}
+
+		return $query->posts;
+	}
+
+
+
+	/**
 	 * Get total number of Posts.
 	 *
 	 * @since 1.0.0
 	 *
+	 * @param mixed $query_args Query Args.
 	 * @return int
 	 */
-	public static function get_posts_count( $key = '', $value = '', $limit = true, $cache = '' ): int {
-		$query = static::get_query( $key, $value, $force, $cache );
+	public static function get_posts_count( $query = [] ): int {
+		$query = static::get_query( $query );
 
 		if ( ! ( $query instanceof \WP_Query ) ) {
 			return 0;
