@@ -76,7 +76,7 @@ class Admin extends Service implements Kernel {
 			'manage_options',
 			self::PLUGIN_SLUG,
 			null,
-			'dashicons-admin-customizer',
+			'dashicons-align-wide',
 			100
 		);
 
