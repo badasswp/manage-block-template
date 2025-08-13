@@ -45,6 +45,10 @@ msgstr ""
 msgid "https://github.com/badasswp"
 msgstr ""
 
+#. Settings
+msgid "Settings"
+msgstr ""
+
 #. Composer Message
 msgid "Fatal Error: Composer not setup in %s"
 msgstr ""
