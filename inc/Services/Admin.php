@@ -99,19 +99,18 @@ class Admin extends Service implements Kernel {
 	 */
 	public function register_options_cb(): void {
 		$this->options = get_option( self::PLUGIN_OPTION, [] )['post_types'] ?? [];
-
 		?>
-<div class="wrap">
-	<h1><?php esc_html_e( 'Manage Block Template', 'manage-block-template' ); ?></h1>
-	<p><?php esc_html_e( 'A simple plugin to manage block templates easily.', 'manage-block-template' ); ?></p>
-	<form method="post" action="options.php">
-		<?php
-				settings_fields( self::PLUGIN_GROUP );
-				do_settings_sections( self::PLUGIN_SLUG );
-				submit_button();
-		?>
-	</form>
-</div>
+		<div class="wrap">
+			<h1><?php esc_html_e( 'Manage Block Template', 'manage-block-template' ); ?></h1>
+			<p><?php esc_html_e( 'A simple plugin to manage block templates easily.', 'manage-block-template' ); ?></p>
+			<form method="post" action="options.php">
+				<?php
+					settings_fields( self::PLUGIN_GROUP );
+					do_settings_sections( self::PLUGIN_SLUG );
+					submit_button();
+				?>
+			</form>
+		</div>
 		<?php
 	}
 
