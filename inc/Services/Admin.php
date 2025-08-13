@@ -101,17 +101,17 @@ class Admin extends Service implements Kernel {
 		$this->options = get_option( self::PLUGIN_OPTION, [] )['post_types'] ?? [];
 
 		?>
-		<div class="wrap">
-			<h1><?php esc_html_e( 'Manage Block Template', 'manage-block-template' ); ?></h1>
-			<p><?php esc_html_e( 'A simple plugin to manage block templates easily.', 'manage-block-template' ); ?></p>
-			<form method="post" action="options.php">
-			<?php
+<div class="wrap">
+	<h1><?php esc_html_e( 'Manage Block Template', 'manage-block-template' ); ?></h1>
+	<p><?php esc_html_e( 'A simple plugin to manage block templates easily.', 'manage-block-template' ); ?></p>
+	<form method="post" action="options.php">
+		<?php
 				settings_fields( self::PLUGIN_GROUP );
 				do_settings_sections( self::PLUGIN_SLUG );
 				submit_button();
-			?>
-			</form>
-		</div>
+		?>
+	</form>
+</div>
 		<?php
 	}
 
@@ -194,6 +194,13 @@ class Admin extends Service implements Kernel {
 				return [
 					'name'    => $post_type,
 					'label'   => esc_html__( ucwords( sprintf( '%s Template', $post_type ) ), 'manage-block-template' ),
+					'label'   => ucwords(
+						sprintf(
+							'%s %s',
+							esc_html( $post_type ),
+							esc_html__( 'Template', 'manage-block-template' )
+						)
+					),
 					'cb'      => [ $this, 'template_cb_' . $post_type ],
 					'page'    => self::PLUGIN_SLUG,
 					'section' => self::PLUGIN_SECTION,
