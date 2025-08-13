@@ -44,3 +44,35 @@ msgstr ""
 #. Author URI of the plugin/theme
 msgid "https://github.com/badasswp"
 msgstr ""
+
+#. Composer Message
+msgid "Fatal Error: Composer not setup in %s"
+msgstr ""
+
+#. Template
+msgid "Template"
+msgstr ""
+
+#. Templates
+msgid "Templates"
+msgstr ""
+
+#. Add New Template
+msgid "Add New Template"
+msgstr ""
+
+#. Search Templates
+msgid "Search Templates"
+msgstr ""
+
+#. Blocks
+msgid "Blocks"
+msgstr ""
+
+#. Total Number of Blocks
+msgid "Total Number of Blocks"
+msgstr ""
+
+#. Date
+msgid "Date"
+msgstr ""
