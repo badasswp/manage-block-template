@@ -10,6 +10,8 @@
 		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase" />
 		<exclude name="WordPress.WP.I18n.NonSingularStringLiteralText" />
 		<exclude name="WordPress.WP.I18n.InterpolatedVariableText" />
+		<exclude name="WordPress.Arrays.ArrayKeySpacingRestrictions.TooMuchSpaceBeforeKey" />
+		<exclude name="WordPress.Arrays.ArrayKeySpacingRestrictions.TooMuchSpaceAfterKey" />
 	</rule>
 
 	<arg value="s" />
