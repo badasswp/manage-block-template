@@ -193,7 +193,6 @@ class Admin extends Service implements Kernel {
 			function ( $post_type ) {
 				return [
 					'name'    => $post_type,
-					'label'   => esc_html__( ucwords( sprintf( '%s Template', $post_type ) ), 'manage-block-template' ),
 					'label'   => ucwords(
 						sprintf(
 							'%s %s',
