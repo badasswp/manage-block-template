@@ -8,7 +8,7 @@ Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Create and manage block templates for different post types within your WordPress website. Perfect for website owners who run blogs, news or web-based applications!
+Create and manage block templates for different post types within your WordPress website. Perfect for website owners who run blogs, news or websites with tons of post types!
 
 == Installation ==
 
@@ -24,7 +24,7 @@ Create and manage block templates for different post types within your WordPress
 
 == Description ==
 
-Creating and managing block templates for different post types within your WP website doesn't have to be rocket science! With this plugin, you can easily create multiple block templates of your choice and assign them to specific post types within your website. It's fast and super easy to use. This plugin is perfect for website owners who run blogs, news or web-based applications built using WordPress.
+Creating and managing block templates for different post types within your WP website doesn't have to be rocket science! With this plugin, you can easily create multiple block templates of your choice and assign them to specific post types within your website. It's fast and super easy to use. This plugin is perfect for website owners who run blogs, news or websites with tons of post types!
 
 Now, you have one less to worry about...
 
