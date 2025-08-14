@@ -8,11 +8,11 @@ A simple plugin to manage block templates easily.
 
 ## Why Manage Block Template?
 
-Creating and managing block templates for different post types within your WP website doesn't have to be rocket science! With this plugin, you can easily create multiple block templates of your choice and assign them to specific post types within your website. It's fast and super easy to use. This plugin is perfect for website owners who run blogs, news or websites with tons of post types!
+Creating and managing block templates for different post types within your WP website doesn't have to be rocket science! With this plugin, you can easily create multiple block templates of your choice and assign them to specific post types within your website. It's fast and super easy to use.
 
-Now, you have one less to worry about...
+This plugin is perfect for website owners who run blogs, news or websites with tons of post types! Now, you have one less to worry about...
 
-https://github.com/user-attachments/assets/c6a4ab89-6575-488d-805e-5ed2ac301cc3
+https://github.com/user-attachments/assets/4b509263-b296-447d-a700-5d1a12aafb10
 
 ### Hooks
 
