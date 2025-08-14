@@ -237,6 +237,7 @@ class Admin extends Service implements Kernel {
 		}
 
 		$mbt_ids = wp_list_pluck( get_posts( [ 'post_type' => 'mbt' ] ), 'ID' );
+		array_unshift( $mbt_ids, 0 );
 
 		foreach ( $mbt_ids as $post_id ) {
 			$selected = '';
@@ -245,11 +246,17 @@ class Admin extends Service implements Kernel {
 				$selected = 'selected';
 			}
 
+			$label = esc_html( get_post_field( 'post_title', absint( $post_id ) ) );
+
+			if ( 0 === $post_id ) {
+				$label = esc_html__( 'None', 'manage-block-template' );
+			}
+
 			$options .= sprintf(
 				'<option value="%1$s" %2$s>%3$s</option>',
 				esc_attr( $post_id ),
 				esc_attr( $selected ),
-				esc_html( get_post_field( 'post_title', absint( $post_id ) ) ),
+				$label,
 			);
 		}
 
