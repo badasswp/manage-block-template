@@ -2,6 +2,7 @@
 
 namespace ManageBlockTemplate\Tests\Services;
 
+use Mockery;
 use WP_Mock\Tools\TestCase;
 use ManageBlockTemplate\Services\Template;
 
@@ -52,7 +53,7 @@ class TemplateTest extends TestCase {
 			->twice()
 			->andReturn( true );
 
-		$template = \Mockery::mock( Template::class )->makePartial();
+		$template = Mockery::mock( Template::class )->makePartial();
 		$template->shouldAllowMockingProtectedMethods();
 
 		$template->shouldReceive( 'register_template' )
@@ -64,7 +65,7 @@ class TemplateTest extends TestCase {
 	}
 
 	public function test_register_template_fails_if_post_type_object_is_null() {
-		$template = \Mockery::mock( Template::class )->makePartial();
+		$template = Mockery::mock( Template::class )->makePartial();
 		$template->shouldAllowMockingProtectedMethods();
 
 		\WP_Mock::userFunction( 'get_post_type_object' )
@@ -87,10 +88,10 @@ class TemplateTest extends TestCase {
 	}
 
 	public function test_register_template_fails_if_ID_is_zero() {
-		$template = \Mockery::mock( Template::class )->makePartial();
+		$template = Mockery::mock( Template::class )->makePartial();
 		$template->shouldAllowMockingProtectedMethods();
 
-		$wp_post_type = \Mockery::mock( \WP_Post_Type::class )->makePartial();
+		$wp_post_type = Mockery::mock( \WP_Post_Type::class )->makePartial();
 		$wp_post_type->shouldAllowMockingProtectedMethods();
 
 		\WP_Mock::userFunction( 'get_post_type_object' )
@@ -113,10 +114,10 @@ class TemplateTest extends TestCase {
 	}
 
 	public function test_register_template_fails_if_post_content_is_empty() {
-		$template = \Mockery::mock( Template::class )->makePartial();
+		$template = Mockery::mock( Template::class )->makePartial();
 		$template->shouldAllowMockingProtectedMethods();
 
-		$wp_post_type = \Mockery::mock( \WP_Post_Type::class )->makePartial();
+		$wp_post_type = Mockery::mock( \WP_Post_Type::class )->makePartial();
 		$wp_post_type->shouldAllowMockingProtectedMethods();
 
 		\WP_Mock::userFunction( 'get_post_type_object' )
@@ -142,10 +143,10 @@ class TemplateTest extends TestCase {
 	}
 
 	public function test_register_template_passes_with_empty_array() {
-		$template = \Mockery::mock( Template::class )->makePartial();
+		$template = Mockery::mock( Template::class )->makePartial();
 		$template->shouldAllowMockingProtectedMethods();
 
-		$wp_post_type = \Mockery::mock( \WP_Post_Type::class )->makePartial();
+		$wp_post_type = Mockery::mock( \WP_Post_Type::class )->makePartial();
 		$wp_post_type->shouldAllowMockingProtectedMethods();
 
 		\WP_Mock::userFunction( 'get_post_type_object' )
@@ -178,10 +179,10 @@ class TemplateTest extends TestCase {
 	}
 
 	public function test_register_template_passes_with_parsed_blocks_array() {
-		$template = \Mockery::mock( Template::class )->makePartial();
+		$template = Mockery::mock( Template::class )->makePartial();
 		$template->shouldAllowMockingProtectedMethods();
 
-		$wp_post_type = \Mockery::mock( \WP_Post_Type::class )->makePartial();
+		$wp_post_type = Mockery::mock( \WP_Post_Type::class )->makePartial();
 		$wp_post_type->shouldAllowMockingProtectedMethods();
 
 		\WP_Mock::userFunction( 'get_post_type_object' )
