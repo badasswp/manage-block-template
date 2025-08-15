@@ -218,6 +218,194 @@ class AdminTest extends TestCase {
 		$this->assertConditionsMet();
 	}
 
+	public function test_template_cb_post_bails_out_if_post_does_not_exist() {
+		$admin = Mockery::mock( Admin::class )->makePartial();
+		$admin->shouldAllowMockingProtectedMethods();
+
+		\WP_Mock::userFunction( 'post_type_exists' )
+			->andReturn( false );
+
+		$admin->template_cb_post();
+
+		$this->assertConditionsMet();
+	}
+
+	public function test_template_cb_post_prints_select_control_with_post_mapped_to_template() {
+		$admin                  = new Admin();
+		$admin->options['post'] = 1;
+
+		$post1 = Mockery::mock( \WP_Post::class )->makePartial();
+		$post2 = Mockery::mock( \WP_Post::class )->makePartial();
+
+		$post1->ID = 1;
+		$post2->ID = 2;
+
+		\WP_Mock::userFunction( 'post_type_exists' )
+			->andReturn( true );
+
+		\WP_Mock::userFunction( 'get_posts' )
+			->andReturn( [ $post1, $post2 ] );
+
+		\WP_Mock::userFunction( 'wp_list_pluck' )
+			->andReturnUsing(
+				function ( $arg ) {
+					return array_map(
+						function ( $post_obj ) {
+							return $post_obj->ID;
+						},
+						$arg
+					);
+				}
+			);
+
+		\WP_Mock::userFunction( 'absint' )
+			->andReturnUsing(
+				function ( $arg ) {
+					return intval( $arg );
+				}
+			);
+
+		\WP_Mock::userFunction( 'get_post_field' )
+			->andReturnUsing(
+				function ( $arg1, $arg2 ) {
+					$title = '';
+
+					switch ( $arg2 ) {
+						case 1:
+							$title = 'My Custom Template 1';
+							break;
+
+						case 2:
+							$title = 'My Custom Template 2';
+							break;
+					}
+
+					return $title;
+				}
+			);
+
+		\WP_Mock::userFunction( 'esc_html' )
+			->andReturnUsing(
+				function ( $arg ) {
+					return $arg;
+				}
+			);
+
+		\WP_Mock::userFunction( 'esc_html__' )
+			->andReturnUsing(
+				function ( $arg ) {
+					return $arg;
+				}
+			);
+
+		\WP_Mock::userFunction( 'esc_attr' )
+			->andReturnUsing(
+				function ( $arg ) {
+					return $arg;
+				}
+			);
+
+		$this->expectOutputString(
+			'<select
+				id="post"
+				name="manage_block_template[post_types][post]"
+				value="1"
+			><option value="0" >None</option><option value="1" selected>My Custom Template 1</option><option value="2" >My Custom Template 2</option></select>',
+		);
+
+		$admin->template_cb_post();
+
+		$this->assertConditionsMet();
+	}
+
+	public function test_template_cb_post_prints_select_control_pointing_to_none() {
+		$admin                  = new Admin();
+		$admin->options['post'] = 0;
+
+		$post1 = Mockery::mock( \WP_Post::class )->makePartial();
+		$post2 = Mockery::mock( \WP_Post::class )->makePartial();
+
+		$post1->ID = 1;
+		$post2->ID = 2;
+
+		\WP_Mock::userFunction( 'post_type_exists' )
+			->andReturn( true );
+
+		\WP_Mock::userFunction( 'get_posts' )
+			->andReturn( [ $post1, $post2 ] );
+
+		\WP_Mock::userFunction( 'wp_list_pluck' )
+			->andReturnUsing(
+				function ( $arg ) {
+					return array_map(
+						function ( $post_obj ) {
+							return $post_obj->ID;
+						},
+						$arg
+					);
+				}
+			);
+
+		\WP_Mock::userFunction( 'absint' )
+			->andReturnUsing(
+				function ( $arg ) {
+					return intval( $arg );
+				}
+			);
+
+		\WP_Mock::userFunction( 'get_post_field' )
+			->andReturnUsing(
+				function ( $arg1, $arg2 ) {
+					$title = '';
+
+					switch ( $arg2 ) {
+						case 1:
+							$title = 'My Custom Template 1';
+							break;
+
+						case 2:
+							$title = 'My Custom Template 2';
+							break;
+					}
+
+					return $title;
+				}
+			);
+
+		\WP_Mock::userFunction( 'esc_html' )
+			->andReturnUsing(
+				function ( $arg ) {
+					return $arg;
+				}
+			);
+
+		\WP_Mock::userFunction( 'esc_html__' )
+			->andReturnUsing(
+				function ( $arg ) {
+					return $arg;
+				}
+			);
+
+		\WP_Mock::userFunction( 'esc_attr' )
+			->andReturnUsing(
+				function ( $arg ) {
+					return $arg;
+				}
+			);
+
+		$this->expectOutputString(
+			'<select
+				id="post"
+				name="manage_block_template[post_types][post]"
+				value="0"
+			><option value="0" selected>None</option><option value="1" >My Custom Template 1</option><option value="2" >My Custom Template 2</option></select>',
+		);
+
+		$admin->template_cb_post();
+
+		$this->assertConditionsMet();
+	}
+
 	public function test_sanitize_options_does_not_sanitize_any_control_if_not_set() {
 		$admin = Mockery::mock( Admin::class )->makePartial();
 		$admin->shouldAllowMockingProtectedMethods();
