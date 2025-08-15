@@ -231,6 +231,7 @@ class Admin extends Service implements Kernel {
 	public function __call( $method, $args ) {
 		$method    = explode( '_', $method );
 		$post_type = array_pop( $method );
+		$options   = '';
 
 		if ( empty( $post_type ) || ! post_type_exists( $post_type ) ) {
 			return;
