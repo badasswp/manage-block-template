@@ -60,12 +60,13 @@ class Template extends Service implements Kernel {
 	 */
 	protected function register_template( $post_type, $mbt_post_id ): void {
 		$post_type_object = get_post_type_object( $post_type );
+		$mbt_post_id      = absint( $mbt_post_id );
 
 		if ( ! $post_type_object || ! $mbt_post_id ) {
 			return;
 		}
 
-		$post_content = get_post_field( 'post_content', absint( $mbt_post_id ) );
+		$post_content = get_post_field( 'post_content', $mbt_post_id );
 
 		if ( empty( $post_content ) ) {
 			return;
