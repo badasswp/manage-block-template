@@ -2,7 +2,6 @@
 
 namespace ManageBlockTemplate\Tests\Services;
 
-use stdClass;
 use WP_Mock\Tools\TestCase;
 use ManageBlockTemplate\Posts\MBT;
 use ManageBlockTemplate\Services\Post;
