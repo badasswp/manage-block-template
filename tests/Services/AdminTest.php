@@ -474,4 +474,63 @@ class AdminTest extends TestCase {
 
 		$this->assertConditionsMet();
 	}
+
+	public function test_register_options_cb() {
+		$admin = new Admin();
+
+		\WP_Mock::userFunction( 'get_option' )
+			->with( 'manage_block_template', [] )
+			->andReturn( [] );
+
+		\WP_Mock::userFunction( 'esc_html_e' )
+			->andReturnUsing(
+				function ( $arg ) {
+					echo $arg;
+				}
+			);
+
+		\WP_Mock::userFunction( 'settings_fields' )
+			->andReturnUsing(
+				function ( $arg ) {
+					?>
+					<section id="<?php echo $arg; ?>"></section>
+					<?php
+				}
+			);
+
+		\WP_Mock::userFunction( 'do_settings_sections' )
+			->andReturnUsing(
+				function ( $arg ) {
+					?>
+					<div id="<?php echo $arg; ?>"></div>
+					<?php
+				}
+			);
+
+		\WP_Mock::userFunction( 'submit_button' )
+			->andReturnUsing(
+				function () {
+					?>
+					<button type="submit">Save Changes</button>
+					<?php
+				}
+			);
+
+		$register = $admin->register_options_cb();
+
+		$this->expectOutputString(
+			'		<div class="wrap">
+			<h1>Manage Block Template</h1>
+			<p>A simple plugin to manage block templates easily.</p>
+			<form method="post" action="options.php">
+									<section id="manage-block-template-group"></section>
+										<div id="manage-block-template"></div>
+										<button type="submit">Save Changes</button>
+								</form>
+		</div>
+		'
+		);
+		$this->assertNull( $register );
+		$this->assertConditionsMet();
+	}
 }
