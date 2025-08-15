@@ -14,6 +14,7 @@ use ManageBlockTemplate\Services\Admin;
  * @covers \ManageBlockTemplate\Services\Admin::get_options
  * @covers \ManageBlockTemplate\Services\Admin::sanitize_options
  * @covers \ManageBlockTemplate\Services\Admin::get_allowed_post_types
+ * @covers \ManageBlockTemplate\Services\Admin::get_callback_name
  */
 class AdminTest extends TestCase {
 	public function setUp(): void {

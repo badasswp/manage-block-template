@@ -9,6 +9,7 @@ use ManageBlockTemplate\Services\Template;
 /**
  * @covers \ManageBlockTemplate\Services\Template::init
  * @covers \ManageBlockTemplate\Services\Template::register_template
+ * @covers \ManageBlockTemplate\Services\Template::register
  */
 class TemplateTest extends TestCase {
 	public function setUp(): void {
