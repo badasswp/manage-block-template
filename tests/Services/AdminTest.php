@@ -13,7 +13,7 @@ use ManageBlockTemplate\Services\Admin;
  * @covers \ManageBlockTemplate\Services\Admin::register_options_cb
  * @covers \ManageBlockTemplate\Services\Admin::get_sections
  * @covers \ManageBlockTemplate\Services\Admin::get_options
- * @covers \ManageBlockTemplate\Services\Admin::template_cb_post
+ * @covers \ManageBlockTemplate\Services\Admin::__call
  * @covers \ManageBlockTemplate\Services\Admin::sanitize_options
  * @covers \ManageBlockTemplate\Services\Admin::get_allowed_post_types
  * @covers \ManageBlockTemplate\Services\Admin::get_callback_name
