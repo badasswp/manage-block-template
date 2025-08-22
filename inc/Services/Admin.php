@@ -270,7 +270,7 @@ class Admin extends Service implements Kernel {
 			esc_attr( self::PLUGIN_OPTION ),
 			esc_attr( $post_type ),
 			esc_attr( $this->options[ $post_type ] ?? '' ),
-			$options
+			esc_html( $options )
 		);
 	}
 
