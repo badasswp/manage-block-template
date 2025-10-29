@@ -270,7 +270,15 @@ class Admin extends Service implements Kernel {
 			esc_attr( self::PLUGIN_OPTION ),
 			esc_attr( $post_type ),
 			esc_attr( $this->options[ $post_type ] ?? '' ),
-			esc_html( $options )
+			wp_kses(
+				$options,
+				[
+					'option' => [
+						'value'    => [],
+						'selected' => [],
+					],
+				]
+			)
 		);
 	}
 
