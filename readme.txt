@@ -35,8 +35,8 @@ The plugin provides the following capabilities:
 ✔️ <strong>Templates</strong>: Dashboard for creating block templates. Simply drag and drop.
 ✔️ <strong>Settings</strong>: An options page for mapping templates to post types.
 ✔️ <strong>Custom filters</strong>: `manage_block_template_post_types`, `manage_block_template_blocks`, `manage_block_template_admin_fields` for customizing plugin options.
-✔️ Available in <strong>mutiple langauges</strong> such as Arabic, Chinese, Danish, Hebrew, Hindi, Russian, German, Italian, Croatian, Spanish & French languages.
-✔️ Super Fast and easy to work it.
+✔️ Available in <strong>multiple langauges</strong> such as Arabic, Chinese, Danish, Hebrew, Hindi, Russian, German, Italian, Croatian, Spanish & French languages.
+✔️ Super fast and easy to work with.
 ✔️ <strong>Backward compatible</strong>, works with most WP versions.
 
 = ✨ Getting Started =
