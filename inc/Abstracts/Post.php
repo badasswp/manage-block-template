@@ -190,40 +190,49 @@ abstract class Post {
 
 		$labels = [
 			'name'          => sprintf(
-				'%1$s',
-				esc_html__( $plural_label, 'manage-block-template' ),
+				/* translators: plural label. */
+				esc_html__( '%1$s', 'manage-block-template' ), // phpcs:ignore WordPress.WP.I18n.NoEmptyStrings
+				$plural_label
 			),
 			'singular_name' => sprintf(
-				'%1$s',
-				esc_html__( $singular_label, 'manage-block-template' ),
-			),
-			'add_new'       => sprintf(
-				'%1$s',
-				esc_html__( "Add New {$singular_label}", 'manage-block-template' ),
-			),
-			'add_new_item'  => sprintf(
-				'%1$s',
-				esc_html__( "Add New {$singular_label}", 'manage-block-template' ),
-			),
-			'new_item'      => sprintf(
-				'%1$s',
-				esc_html__( "New {$singular_label}", 'manage-block-template' ),
-			),
-			'edit_item'     => sprintf(
-				'%1$s',
-				esc_html__( "Edit {$singular_label}", 'manage-block-template' ),
-			),
-			'view_item'     => sprintf(
-				'%1$s',
-				esc_html__( "View {$singular_label}", 'manage-block-template' ),
-			),
-			'search_items'  => sprintf(
-				'%1$s',
-				esc_html__( "Search {$plural_label}", 'manage-block-template' ),
+				/* translators: singular label. */
+				esc_html__( '%1$s', 'manage-block-template' ), // phpcs:ignore WordPress.WP.I18n.NoEmptyStrings
+				$singular_label
 			),
 			'menu_name'     => sprintf(
-				'%1$s',
-				esc_html__( $plural_label, 'manage-block-template' ),
+				/* translators: menu name label. */
+				esc_html__( '%1$s', 'manage-block-template' ), // phpcs:ignore WordPress.WP.I18n.NoEmptyStrings
+				$plural_label
+			),
+			'add_new'       => sprintf(
+				/* translators: add new label. */
+				esc_html__( 'Add New %1$s', 'manage-block-template' ),
+				$singular_label
+			),
+			'add_new_item'  => sprintf(
+				/* translators: add new item label. */
+				esc_html__( 'Add New %1$s', 'manage-block-template' ),
+				$singular_label
+			),
+			'new_item'      => sprintf(
+				/* translators: new item label. */
+				esc_html__( 'New %1$s', 'manage-block-template' ),
+				$singular_label
+			),
+			'edit_item'     => sprintf(
+				/* translators: edit item label. */
+				esc_html__( 'Edit %1$s', 'manage-block-template' ),
+				$singular_label
+			),
+			'view_item'     => sprintf(
+				/* translators: view item label. */
+				esc_html__( 'View %1$s', 'manage-block-template' ),
+				$singular_label
+			),
+			'search_items'  => sprintf(
+				/* translators: search items label. */
+				esc_html__( 'Search %1$s', 'manage-block-template' ),
+				$plural_label
 			),
 		];
 
@@ -283,7 +292,7 @@ abstract class Post {
 			}
 
 			if ( 'blocks' === $column ) {
-				echo $value;
+				echo esc_html( $value );
 				return;
 			}
 

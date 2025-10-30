@@ -49,7 +49,9 @@ class Post extends Service implements Kernel {
 
 		foreach ( $post_types as $class ) {
 			if ( ! class_exists( $class ) ) {
-				throw new \LogicException( $class . ' does not exist.' );
+				throw new \LogicException(
+					esc_html( $class ) . ' does not exist.'
+				);
 			}
 			$this->objects[] = new $class();
 		}
