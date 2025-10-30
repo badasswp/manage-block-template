@@ -487,7 +487,7 @@ class AdminTest extends TestCase {
 		\WP_Mock::userFunction( 'esc_html_e' )
 			->andReturnUsing(
 				function ( $arg ) {
-					echo $arg;
+					echo $arg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				}
 			);
 
@@ -495,7 +495,7 @@ class AdminTest extends TestCase {
 			->andReturnUsing(
 				function ( $arg ) {
 					?>
-					<section id="<?php echo $arg; ?>"></section>
+					<section id="<?php echo $arg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>"></section>
 					<?php
 				}
 			);
@@ -504,7 +504,7 @@ class AdminTest extends TestCase {
 			->andReturnUsing(
 				function ( $arg ) {
 					?>
-					<div id="<?php echo $arg; ?>"></div>
+					<div id="<?php echo $arg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>"></div>
 					<?php
 				}
 			);
