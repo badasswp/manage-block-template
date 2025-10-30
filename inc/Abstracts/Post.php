@@ -296,7 +296,7 @@ abstract class Post {
 					$value,
 					[
 						'span' => [
-							'style'    => [],
+							'style' => [],
 						],
 					]
 				);
