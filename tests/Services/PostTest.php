@@ -35,6 +35,34 @@ class PostTest extends TestCase {
 			]
 		);
 
+		\WP_Mock::userFunction( 'wp_kses' )
+			->andReturnUsing(
+				function ( $arg1, $arg2 ) {
+					$dom = new \DOMDocument();
+
+					// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+					@$dom->loadHTML( $arg1 );
+
+					// phpcs:ignore PEAR.Functions.FunctionCallSignature.SpaceAfterOpenBracket
+					$elements = $dom->getElementsByTagName( '*' );
+
+					$tags = [];
+
+					foreach ( $elements as $el ) {
+						// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+						$tags[] = $el->tagName;
+					}
+
+					$html_tags = array_values( array_diff( array_unique( $tags ), [ 'html', 'body' ] ) );
+
+					if ( ! empty( array_diff( array_keys( $arg2 ), $html_tags ) ) ) {
+						return '';
+					}
+
+					return $arg1;
+				}
+			);
+
 		$this->post = new Post();
 	}
 
@@ -96,13 +124,13 @@ class PostTest extends TestCase {
 		$labels = [
 			'name'          => 'Templates',
 			'singular_name' => 'Template',
+			'menu_name'     => 'Templates',
 			'add_new'       => 'Add New Template',
 			'add_new_item'  => 'Add New Template',
 			'new_item'      => 'New Template',
 			'edit_item'     => 'Edit Template',
 			'view_item'     => 'View Template',
 			'search_items'  => 'Search Templates',
-			'menu_name'     => 'Templates',
 		];
 
 		\WP_Mock::userFunction( 'post_type_exists' )
