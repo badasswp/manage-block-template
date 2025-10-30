@@ -8,7 +8,7 @@ Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Create and manage block templates for different post types within your WordPress website. Perfect for website owners who run blogs, news or websites with tons of post types!
+Create and manage block templates for different post types within your WordPress website. Perfect for sites with tons of post types!
 
 == Installation ==
 
