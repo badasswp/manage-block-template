@@ -2,6 +2,7 @@
 
 namespace ManageBlockTemplate\Tests\Posts;
 
+use WP_Mock;
 use Mockery;
 use WP_Mock\Tools\TestCase;
 use ManageBlockTemplate\Posts\MBT;
@@ -16,11 +17,11 @@ use ManageBlockTemplate\Posts\MBT;
  */
 class MBTTest extends TestCase {
 	public function setUp(): void {
-		\WP_Mock::setUp();
+		WP_Mock::setUp();
 	}
 
 	public function tearDown(): void {
-		\WP_Mock::tearDown();
+		WP_Mock::tearDown();
 	}
 
 	public function test_mbt_post_type_returns_singular_label() {
@@ -66,28 +67,28 @@ class MBTTest extends TestCase {
 	}
 
 	public function test_get_post_meta_schema() {
-		\WP_Mock::userFunction( 'esc_html' )
+		WP_Mock::userFunction( 'esc_html' )
 			->andReturnUsing(
 				function ( $arg ) {
 					return $arg;
 				}
 			);
 
-		\WP_Mock::userFunction( 'esc_html__' )
+		WP_Mock::userFunction( 'esc_html__' )
 			->andReturnUsing(
 				function ( $arg1, $arg2 ) {
 					return $arg1;
 				}
 			);
 
-		\WP_Mock::userFunction( 'get_the_ID' )
+		WP_Mock::userFunction( 'get_the_ID' )
 			->andReturn( 1 );
 
-		\WP_Mock::userFunction( 'get_post_field' )
+		WP_Mock::userFunction( 'get_post_field' )
 			->with( 'post_content', 1 )
 			->andReturn( 'Hello World' );
 
-		\WP_Mock::userFunction( 'parse_blocks' )
+		WP_Mock::userFunction( 'parse_blocks' )
 			->with( 'Hello World' )
 			->andReturn(
 				[

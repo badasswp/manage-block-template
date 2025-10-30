@@ -2,6 +2,7 @@
 
 namespace ManageBlockTemplate\Tests\Services;
 
+use WP_Mock;
 use Mockery;
 use WP_Mock\Tools\TestCase;
 use ManageBlockTemplate\Services\Admin;
@@ -20,9 +21,9 @@ use ManageBlockTemplate\Services\Admin;
  */
 class AdminTest extends TestCase {
 	public function setUp(): void {
-		\WP_Mock::setUp();
+		WP_Mock::setUp();
 
-		\WP_Mock::userFunction( 'wp_kses' )
+		WP_Mock::userFunction( 'wp_kses' )
 			->andReturnUsing(
 				function ( $arg1, $arg2 ) {
 					$dom = new \DOMDocument();
@@ -52,14 +53,14 @@ class AdminTest extends TestCase {
 	}
 
 	public function tearDown(): void {
-		\WP_Mock::tearDown();
+		WP_Mock::tearDown();
 	}
 
 	public function test_register() {
 		$admin = new Admin();
 
-		\WP_Mock::expectActionAdded( 'admin_menu', [ $admin, 'register_options_page' ] );
-		\WP_Mock::expectActionAdded( 'admin_init', [ $admin, 'register_options_init' ] );
+		WP_Mock::expectActionAdded( 'admin_menu', [ $admin, 'register_options_page' ] );
+		WP_Mock::expectActionAdded( 'admin_init', [ $admin, 'register_options_init' ] );
 
 		$register = $admin->register();
 
@@ -70,14 +71,14 @@ class AdminTest extends TestCase {
 	public function test_register_options_page() {
 		$admin = new Admin();
 
-		\WP_Mock::userFunction( 'esc_html__' )
+		WP_Mock::userFunction( 'esc_html__' )
 			->andReturnUsing(
 				function ( $arg ) {
 					return $arg;
 				}
 			);
 
-		\WP_Mock::userFunction( 'add_menu_page' )
+		WP_Mock::userFunction( 'add_menu_page' )
 			->with(
 				'Manage Block Template',
 				'Manage Block Template',
@@ -89,7 +90,7 @@ class AdminTest extends TestCase {
 			)
 			->andReturn( null );
 
-		\WP_Mock::userFunction( 'add_submenu_page' )
+		WP_Mock::userFunction( 'add_submenu_page' )
 			->with(
 				'manage-block-template',
 				'Settings',
@@ -140,7 +141,7 @@ class AdminTest extends TestCase {
 				]
 			);
 
-		\WP_Mock::userFunction( 'register_setting' )
+		WP_Mock::userFunction( 'register_setting' )
 			->with(
 				'manage-block-template-group',
 				'manage_block_template',
@@ -148,7 +149,7 @@ class AdminTest extends TestCase {
 			)
 			->andReturn( null );
 
-		\WP_Mock::userFunction( 'add_settings_section' )
+		WP_Mock::userFunction( 'add_settings_section' )
 			->once()
 			->with(
 				'manage-block-template-section',
@@ -158,7 +159,7 @@ class AdminTest extends TestCase {
 			)
 			->andReturn( null );
 
-		\WP_Mock::userFunction( 'add_settings_field' )
+		WP_Mock::userFunction( 'add_settings_field' )
 			->times( 2 );
 
 		$register = $admin->register_options_init();
@@ -171,7 +172,7 @@ class AdminTest extends TestCase {
 		$admin = Mockery::mock( Admin::class )->makePartial();
 		$admin->shouldAllowMockingProtectedMethods();
 
-		\WP_Mock::userFunction( 'esc_html__' )
+		WP_Mock::userFunction( 'esc_html__' )
 			->andReturnUsing(
 				function ( $arg ) {
 					return $arg;
@@ -225,21 +226,21 @@ class AdminTest extends TestCase {
 			],
 		];
 
-		\WP_Mock::userFunction( 'esc_html' )
+		WP_Mock::userFunction( 'esc_html' )
 			->andReturnUsing(
 				function ( $arg ) {
 					return $arg;
 				}
 			);
 
-		\WP_Mock::userFunction( 'esc_html__' )
+		WP_Mock::userFunction( 'esc_html__' )
 			->andReturnUsing(
 				function ( $arg ) {
 					return $arg;
 				}
 			);
 
-		\WP_Mock::expectFilter(
+		WP_Mock::expectFilter(
 			'manage_block_template_admin_fields',
 			$options
 		);
@@ -252,7 +253,7 @@ class AdminTest extends TestCase {
 		$admin = Mockery::mock( Admin::class )->makePartial();
 		$admin->shouldAllowMockingProtectedMethods();
 
-		\WP_Mock::userFunction( 'post_type_exists' )
+		WP_Mock::userFunction( 'post_type_exists' )
 			->andReturn( false );
 
 		$admin->template_cb_post();
@@ -270,13 +271,13 @@ class AdminTest extends TestCase {
 		$post1->ID = 1;
 		$post2->ID = 2;
 
-		\WP_Mock::userFunction( 'post_type_exists' )
+		WP_Mock::userFunction( 'post_type_exists' )
 			->andReturn( true );
 
-		\WP_Mock::userFunction( 'get_posts' )
+		WP_Mock::userFunction( 'get_posts' )
 			->andReturn( [ $post1, $post2 ] );
 
-		\WP_Mock::userFunction( 'wp_list_pluck' )
+		WP_Mock::userFunction( 'wp_list_pluck' )
 			->andReturnUsing(
 				function ( $arg ) {
 					return array_map(
@@ -288,14 +289,14 @@ class AdminTest extends TestCase {
 				}
 			);
 
-		\WP_Mock::userFunction( 'absint' )
+		WP_Mock::userFunction( 'absint' )
 			->andReturnUsing(
 				function ( $arg ) {
 					return intval( $arg );
 				}
 			);
 
-		\WP_Mock::userFunction( 'get_post_field' )
+		WP_Mock::userFunction( 'get_post_field' )
 			->andReturnUsing(
 				function ( $arg1, $arg2 ) {
 					$title = '';
@@ -314,21 +315,21 @@ class AdminTest extends TestCase {
 				}
 			);
 
-		\WP_Mock::userFunction( 'esc_html' )
+		WP_Mock::userFunction( 'esc_html' )
 			->andReturnUsing(
 				function ( $arg ) {
 					return $arg;
 				}
 			);
 
-		\WP_Mock::userFunction( 'esc_html__' )
+		WP_Mock::userFunction( 'esc_html__' )
 			->andReturnUsing(
 				function ( $arg ) {
 					return $arg;
 				}
 			);
 
-		\WP_Mock::userFunction( 'esc_attr' )
+		WP_Mock::userFunction( 'esc_attr' )
 			->andReturnUsing(
 				function ( $arg ) {
 					return $arg;
@@ -358,13 +359,13 @@ class AdminTest extends TestCase {
 		$post1->ID = 1;
 		$post2->ID = 2;
 
-		\WP_Mock::userFunction( 'post_type_exists' )
+		WP_Mock::userFunction( 'post_type_exists' )
 			->andReturn( true );
 
-		\WP_Mock::userFunction( 'get_posts' )
+		WP_Mock::userFunction( 'get_posts' )
 			->andReturn( [ $post1, $post2 ] );
 
-		\WP_Mock::userFunction( 'wp_list_pluck' )
+		WP_Mock::userFunction( 'wp_list_pluck' )
 			->andReturnUsing(
 				function ( $arg ) {
 					return array_map(
@@ -376,14 +377,14 @@ class AdminTest extends TestCase {
 				}
 			);
 
-		\WP_Mock::userFunction( 'absint' )
+		WP_Mock::userFunction( 'absint' )
 			->andReturnUsing(
 				function ( $arg ) {
 					return intval( $arg );
 				}
 			);
 
-		\WP_Mock::userFunction( 'get_post_field' )
+		WP_Mock::userFunction( 'get_post_field' )
 			->andReturnUsing(
 				function ( $arg1, $arg2 ) {
 					$title = '';
@@ -402,21 +403,21 @@ class AdminTest extends TestCase {
 				}
 			);
 
-		\WP_Mock::userFunction( 'esc_html' )
+		WP_Mock::userFunction( 'esc_html' )
 			->andReturnUsing(
 				function ( $arg ) {
 					return $arg;
 				}
 			);
 
-		\WP_Mock::userFunction( 'esc_html__' )
+		WP_Mock::userFunction( 'esc_html__' )
 			->andReturnUsing(
 				function ( $arg ) {
 					return $arg;
 				}
 			);
 
-		\WP_Mock::userFunction( 'esc_attr' )
+		WP_Mock::userFunction( 'esc_attr' )
 			->andReturnUsing(
 				function ( $arg ) {
 					return $arg;
@@ -463,7 +464,7 @@ class AdminTest extends TestCase {
 		$admin->shouldReceive( 'get_allowed_post_types' )
 			->andReturn( [ 'post', 'page' ] );
 
-		\WP_Mock::userFunction( 'absint' )
+		WP_Mock::userFunction( 'absint' )
 			->andReturnUsing(
 				function ( $arg ) {
 					return intval( $arg );
@@ -495,10 +496,10 @@ class AdminTest extends TestCase {
 		$admin = Mockery::mock( Admin::class )->makePartial();
 		$admin->shouldAllowMockingProtectedMethods();
 
-		\WP_Mock::userFunction( 'get_post_types' )
+		WP_Mock::userFunction( 'get_post_types' )
 			->andReturn( [ 'post', 'page', 'mbt', 'attachment' ] );
 
-		\WP_Mock::expectFilter( 'manage_block_template_post_types', [ 'post', 'page' ] );
+		WP_Mock::expectFilter( 'manage_block_template_post_types', [ 'post', 'page' ] );
 
 		$admin->get_allowed_post_types();
 
@@ -508,18 +509,18 @@ class AdminTest extends TestCase {
 	public function test_register_options_cb() {
 		$admin = new Admin();
 
-		\WP_Mock::userFunction( 'get_option' )
+		WP_Mock::userFunction( 'get_option' )
 			->with( 'manage_block_template', [] )
 			->andReturn( [] );
 
-		\WP_Mock::userFunction( 'esc_html_e' )
+		WP_Mock::userFunction( 'esc_html_e' )
 			->andReturnUsing(
 				function ( $arg ) {
 					echo $arg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				}
 			);
 
-		\WP_Mock::userFunction( 'settings_fields' )
+		WP_Mock::userFunction( 'settings_fields' )
 			->andReturnUsing(
 				function ( $arg ) {
 					?>
@@ -528,7 +529,7 @@ class AdminTest extends TestCase {
 				}
 			);
 
-		\WP_Mock::userFunction( 'do_settings_sections' )
+		WP_Mock::userFunction( 'do_settings_sections' )
 			->andReturnUsing(
 				function ( $arg ) {
 					?>
@@ -537,7 +538,7 @@ class AdminTest extends TestCase {
 				}
 			);
 
-		\WP_Mock::userFunction( 'submit_button' )
+		WP_Mock::userFunction( 'submit_button' )
 			->andReturnUsing(
 				function () {
 					?>

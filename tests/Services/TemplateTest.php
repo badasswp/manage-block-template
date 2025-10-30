@@ -2,6 +2,7 @@
 
 namespace ManageBlockTemplate\Tests\Services;
 
+use WP_Mock;
 use Mockery;
 use WP_Mock\Tools\TestCase;
 use ManageBlockTemplate\Services\Template;
@@ -13,17 +14,17 @@ use ManageBlockTemplate\Services\Template;
  */
 class TemplateTest extends TestCase {
 	public function setUp(): void {
-		\WP_Mock::setUp();
+		WP_Mock::setUp();
 	}
 
 	public function tearDown(): void {
-		\WP_Mock::tearDown();
+		WP_Mock::tearDown();
 	}
 
 	public function test_register() {
 		$template = new Template();
 
-		\WP_Mock::expectActionAdded( 'init', [ $template, 'init' ] );
+		WP_Mock::expectActionAdded( 'init', [ $template, 'init' ] );
 
 		$template->register();
 
@@ -31,7 +32,7 @@ class TemplateTest extends TestCase {
 	}
 
 	public function test_init_does_not_register_any_templates_if_post_types_is_empty() {
-		\WP_Mock::userFunction( 'get_option' )
+		WP_Mock::userFunction( 'get_option' )
 			->andReturn( [] );
 
 		( new Template() )->init();
@@ -40,7 +41,7 @@ class TemplateTest extends TestCase {
 	}
 
 	public function test_init_registers_templates_if_post_types_are_found() {
-		\WP_Mock::userFunction( 'get_option' )
+		WP_Mock::userFunction( 'get_option' )
 			->andReturn(
 				[
 					'post_types' => [
@@ -50,7 +51,7 @@ class TemplateTest extends TestCase {
 				]
 			);
 
-		\WP_Mock::userFunction( 'post_type_exists' )
+		WP_Mock::userFunction( 'post_type_exists' )
 			->twice()
 			->andReturn( true );
 
@@ -69,14 +70,14 @@ class TemplateTest extends TestCase {
 		$template = Mockery::mock( Template::class )->makePartial();
 		$template->shouldAllowMockingProtectedMethods();
 
-		\WP_Mock::userFunction( 'get_post_type_object' )
+		WP_Mock::userFunction( 'get_post_type_object' )
 			->andReturnUsing(
 				function ( $arg ) {
 					return is_null( $arg ) ? null : $arg;
 				}
 			);
 
-		\WP_Mock::userFunction( 'absint' )
+		WP_Mock::userFunction( 'absint' )
 			->andReturnUsing(
 				function ( $arg ) {
 					return intval( $arg );
@@ -95,14 +96,14 @@ class TemplateTest extends TestCase {
 		$wp_post_type = Mockery::mock( \WP_Post_Type::class )->makePartial();
 		$wp_post_type->shouldAllowMockingProtectedMethods();
 
-		\WP_Mock::userFunction( 'get_post_type_object' )
+		WP_Mock::userFunction( 'get_post_type_object' )
 			->andReturnUsing(
 				function ( $arg ) {
 					return is_null( $arg ) ? null : $arg;
 				}
 			);
 
-		\WP_Mock::userFunction( 'absint' )
+		WP_Mock::userFunction( 'absint' )
 			->andReturnUsing(
 				function ( $arg ) {
 					return intval( $arg );
@@ -121,21 +122,21 @@ class TemplateTest extends TestCase {
 		$wp_post_type = Mockery::mock( \WP_Post_Type::class )->makePartial();
 		$wp_post_type->shouldAllowMockingProtectedMethods();
 
-		\WP_Mock::userFunction( 'get_post_type_object' )
+		WP_Mock::userFunction( 'get_post_type_object' )
 			->andReturnUsing(
 				function ( $arg ) {
 					return is_null( $arg ) ? null : $arg;
 				}
 			);
 
-		\WP_Mock::userFunction( 'absint' )
+		WP_Mock::userFunction( 'absint' )
 			->andReturnUsing(
 				function ( $arg ) {
 					return intval( $arg );
 				}
 			);
 
-		\WP_Mock::userFunction( 'get_post_field' )
+		WP_Mock::userFunction( 'get_post_field' )
 			->andReturn( '' );
 
 		$template->register_template( $wp_post_type, 1 );
@@ -150,27 +151,27 @@ class TemplateTest extends TestCase {
 		$wp_post_type = Mockery::mock( \WP_Post_Type::class )->makePartial();
 		$wp_post_type->shouldAllowMockingProtectedMethods();
 
-		\WP_Mock::userFunction( 'get_post_type_object' )
+		WP_Mock::userFunction( 'get_post_type_object' )
 			->andReturnUsing(
 				function ( $arg ) {
 					return is_null( $arg ) ? null : $arg;
 				}
 			);
 
-		\WP_Mock::userFunction( 'absint' )
+		WP_Mock::userFunction( 'absint' )
 			->andReturnUsing(
 				function ( $arg ) {
 					return intval( $arg );
 				}
 			);
 
-		\WP_Mock::userFunction( 'get_post_field' )
+		WP_Mock::userFunction( 'get_post_field' )
 			->andReturn( 'Hello World!' );
 
-		\WP_Mock::userFunction( 'parse_blocks' )
+		WP_Mock::userFunction( 'parse_blocks' )
 			->andReturn( [] );
 
-		\WP_Mock::expectFilter( 'manage_block_template_blocks', [], $wp_post_type );
+		WP_Mock::expectFilter( 'manage_block_template_blocks', [], $wp_post_type );
 
 		$template->register_template( $wp_post_type, 1 );
 
@@ -186,24 +187,24 @@ class TemplateTest extends TestCase {
 		$wp_post_type = Mockery::mock( \WP_Post_Type::class )->makePartial();
 		$wp_post_type->shouldAllowMockingProtectedMethods();
 
-		\WP_Mock::userFunction( 'get_post_type_object' )
+		WP_Mock::userFunction( 'get_post_type_object' )
 			->andReturnUsing(
 				function ( $arg ) {
 					return is_null( $arg ) ? null : $arg;
 				}
 			);
 
-		\WP_Mock::userFunction( 'absint' )
+		WP_Mock::userFunction( 'absint' )
 			->andReturnUsing(
 				function ( $arg ) {
 					return intval( $arg );
 				}
 			);
 
-		\WP_Mock::userFunction( 'get_post_field' )
+		WP_Mock::userFunction( 'get_post_field' )
 			->andReturn( 'Hello World!' );
 
-		\WP_Mock::userFunction( 'parse_blocks' )
+		WP_Mock::userFunction( 'parse_blocks' )
 			->andReturn(
 				[
 					[
@@ -225,7 +226,7 @@ class TemplateTest extends TestCase {
 				]
 			);
 
-		\WP_Mock::expectFilter(
+		WP_Mock::expectFilter(
 			'manage_block_template_blocks',
 			[
 				[

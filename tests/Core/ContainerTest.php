@@ -2,6 +2,7 @@
 
 namespace ManageBlockTemplate\Tests\Core;
 
+use WP_Mock;
 use Mockery;
 use WP_Mock\Tools\TestCase;
 use ManageBlockTemplate\Core\Container;
@@ -15,11 +16,11 @@ class ContainerTest extends TestCase {
 	public Container $container;
 
 	public function setUp(): void {
-		\WP_Mock::setUp();
+		WP_Mock::setUp();
 	}
 
 	public function tearDown(): void {
-		\WP_Mock::tearDown();
+		WP_Mock::tearDown();
 	}
 
 	public function test_container_contains_required_services() {
