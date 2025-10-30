@@ -292,7 +292,14 @@ abstract class Post {
 			}
 
 			if ( 'blocks' === $column ) {
-				echo esc_html( $value );
+				echo wp_kses(
+					$value,
+					[
+						'span' => [
+							'style'    => [],
+						],
+					]
+				);
 				return;
 			}
 
