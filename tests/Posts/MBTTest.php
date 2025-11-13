@@ -106,7 +106,7 @@ class MBTTest extends TestCase {
 			[
 				'blocks'                 => [
 					'label'   => 'Blocks',
-					'value'   => '<span style="margin: 0; display: block;">core/paragraph</span><span style="margin: 0; display: block;">core/image</span><span style="margin: 0; display: block;">core/blockquote</span>',
+					'value'   => '<p style="margin: 0;">core/paragraph</p><p style="margin: 0;">core/image</p><p style="margin: 0;">core/blockquote</p>',
 					'type'    => 'string',
 					'default' => '',
 				],
