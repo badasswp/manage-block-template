@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.1
+* Fix: Display blocks in vertical format correctly.
+* Tested up to WP 6.8.
+
 ## 1.0.0
 * Initial plugin release.
 * Added dashboard for creating block templates.

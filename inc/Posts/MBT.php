@@ -112,7 +112,7 @@ class MBT extends Post {
 				}
 
 				$carry .= sprintf(
-					'<span style="margin: 0; display: block;">%s</span>',
+					'<p style="margin: 0;">%s</p>',
 					esc_html( $block['blockName'] ?? '' )
 				);
 
