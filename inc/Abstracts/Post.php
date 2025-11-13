@@ -295,7 +295,7 @@ abstract class Post {
 				echo wp_kses(
 					$value,
 					[
-						'span' => [
+						'p' => [
 							'style' => [],
 						],
 					]
