@@ -3,7 +3,7 @@
  * Plugin Name: Manage Block Template
  * Plugin URI:  https://github.com/badasswp/manage-block-template
  * Description: A simple plugin to manage block templates easily.
- * Version:     1.0.1
+ * Version:     1.0.2
  * Author:      badasswp
  * Author URI:  https://github.com/badasswp
  * License:     GPL v2 or later

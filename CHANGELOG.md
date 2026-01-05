@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.2
+* Specify `wordpress-plugin` as Composer package type.
+* Tested up to WP 6.9.
+
 ## 1.0.1
 * Fix: Display blocks in vertical format correctly.
 * Tested up to WP 6.8.
