@@ -68,6 +68,10 @@ Want to add your personal touch? All of our documentation can be found [here](ht
 
 == Changelog ==
 
+## 1.1.0
+* Update CI/CD pipeline.
+* Tested up to WP 7.0.
+
 = 1.0.2 =
 * Specify `wordpress-plugin` as Composer package type.
 * Tested up to WP 6.9.
