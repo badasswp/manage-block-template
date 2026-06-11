@@ -3,7 +3,7 @@ Contributors: badasswp
 Tags: block, template, post, editor, gutenberg
 Requires at least: 4.0
 Tested up to: 7.0
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -67,6 +67,9 @@ Want to add your personal touch? All of our documentation can be found [here](ht
 4. Posts - Check posts to see block template in place.
 
 == Changelog ==
+
+= 1.2.0 =
+* Feat: Add `More Plugins` options page.
 
 = 1.1.0 =
 * Update CI/CD pipeline.
