@@ -18,6 +18,7 @@ use ManageBlockTemplate\Services\Admin;
  * @covers \ManageBlockTemplate\Services\Admin::sanitize_options
  * @covers \ManageBlockTemplate\Services\Admin::get_allowed_post_types
  * @covers \ManageBlockTemplate\Services\Admin::get_callback_name
+ * @covers \ManageBlockTemplate\Services\Admin::__construct
  */
 class AdminTest extends TestCase {
 	public function setUp(): void {
@@ -61,6 +62,7 @@ class AdminTest extends TestCase {
 
 		WP_Mock::expectActionAdded( 'admin_menu', [ $admin, 'register_options_page' ] );
 		WP_Mock::expectActionAdded( 'admin_init', [ $admin, 'register_options_init' ] );
+		WP_Mock::expectActionAdded( 'admin_init', [ $admin->pluginate, 'init' ] );
 
 		$register = $admin->register();
 
@@ -98,6 +100,21 @@ class AdminTest extends TestCase {
 				'manage_options',
 				'manage-block-template',
 				[ $admin, 'register_options_cb' ],
+			)
+			->andReturn( null );
+
+		WP_Mock::userFunction( '__' )
+			->andReturnUsing( fn( $text, $domain ) => $text );
+
+		WP_Mock::userFunction( 'add_submenu_page' )
+			->once()
+			->with(
+				'manage-block-template',
+				'More Plugins',
+				'More Plugins',
+				'manage_options',
+				'manage-block-template-more-plugins',
+				[ $admin, 'register_more_plugins' ]
 			)
 			->andReturn( null );
 
